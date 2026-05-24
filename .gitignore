@@ -1,0 +1,55 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.iml
+
+# Environment / secrets
+.env
+.env.*
+*.key
+*.pem
+*.p12
+*.jks
+key.properties
+**/key.properties
+
+# Flutter / Dart build output
+**/.dart_tool/
+**/.flutter-plugins
+**/.flutter-plugins-dependencies
+**/.packages
+**/build/
+**/coverage/
+**/ios/Flutter/.last_build_id
+
+# Android / Gradle generated files
+**/.gradle/
+**/android/app/debug/
+**/android/app/profile/
+**/android/app/release/
+
+# PHP / local runtime
+vendor/
+composer.lock
+
+# Python generated/cache files
+__pycache__/
+**/__pycache__/
+*.pyc
+tools/python_libs/
+
+# Generated exports and company data snapshots
+*.xlsx
+*.xls
+*.csv
+it_asset_management_import_phpmyadmin.sql
+it_asset_management_infinityfree_export.sql
+deploy/oracle/*.zip
+deploy/oracle/*import*.sql
+
+# Generated reports/presentations/reference projects
+reports/
+presentations/
+medicaltoolv2_reference/
