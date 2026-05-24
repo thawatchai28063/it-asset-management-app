@@ -1,11 +1,8 @@
 # IT Asset Management App
 
-โปรเจกต์นี้มี 2 ส่วน:
+Mobile app สำหรับจัดการทรัพย์สิน IT พร้อม PHP REST API และ MySQL database
 
-- `it_asset_api` คือ PHP RESTful API สำหรับวางใน `C:\xampp\htdocs\it_asset_api`
-- `it_asset_management_app` คือ Flutter mobile app
-
-## Folder Structure
+## Project Structure
 
 ```text
 it_asset_api/
@@ -13,64 +10,69 @@ it_asset_api/
   config/
     database.php
   api/
-    register.php
     login.php
+    register.php
     assets/
-      index.php
-      show.php
-      create.php
-      update.php
-      delete.php
     maintenance/
-      index.php
-      create.php
-      update.php
-      delete.php
 
 it_asset_management_app/
   pubspec.yaml
   lib/
     main.dart
-    models/
-    services/
-    screens/
-    widgets/
+    src/
+      config/
+      models/
+      services/
+      features/
+      shared/
 ```
 
-## Install Backend On XAMPP
+## Features
 
-1. เปิด XAMPP Control Panel
-2. Start `Apache` และ `MySQL`
-3. คัดลอกโฟลเดอร์ `it_asset_api` ไปไว้ที่:
+- Register, Login, Logout
+- Dashboard summary
+- Asset CRUD
+- Asset search
+- Barcode / IT tag scan
+- Department and asset type filters
+- Maintenance history CRUD
+- Shared API config in one file
+
+## Backend Setup With XAMPP
+
+1. Start `Apache` and `MySQL` in XAMPP.
+2. Copy `it_asset_api` to:
 
 ```text
 C:\xampp\htdocs\it_asset_api
 ```
 
-4. เปิด phpMyAdmin:
+3. Open phpMyAdmin:
 
 ```text
 http://localhost/phpmyadmin
 ```
 
-5. Import ไฟล์:
+4. Import:
 
 ```text
 it_asset_api/database.sql
 ```
 
-ไฟล์นี้จะสร้างฐานข้อมูล `it_asset_management` พร้อมตาราง `users`, `assets`, `maintenance_logs` และ seed assets 10 รายการ
+5. Check API:
 
-บัญชีทดสอบ:
+```text
+http://localhost/it_asset_api/api/assets/index.php
+```
+
+## Test Accounts
 
 ```text
 admin@example.com / password
 staff@example.com / password
 ```
 
-## Run Flutter
-
-เข้าโฟลเดอร์แอพ:
+## Flutter Setup
 
 ```powershell
 cd it_asset_management_app
@@ -78,63 +80,39 @@ flutter pub get
 flutter run
 ```
 
-โปรเจกต์นี้มีโฟลเดอร์ `android`, `ios`, และ `web` แล้ว สามารถรันต่อได้ทันทีหลัง `flutter pub get`
+API URL is configured in:
 
-ค่า API อยู่ที่ `lib/services/api_service.dart`
+```text
+it_asset_management_app/lib/src/config/api_config.dart
+```
+
+For a real Android phone on the same LAN, update:
 
 ```dart
-static String get baseUrl {
-  const definedUrl = String.fromEnvironment('API_BASE_URL');
-  if (definedUrl.isNotEmpty) {
-    return definedUrl;
-  }
-  return kIsWeb
-      ? 'http://localhost/it_asset_api/api'
-      : 'http://172.24.13.204/it_asset_api/api';
-}
+static const String mobileBaseUrl = 'http://YOUR_COMPUTER_IP/it_asset_api/api';
 ```
 
-ระบบตั้งค่าให้ใช้ `localhost` เมื่อรัน Flutter Web และใช้ IP เครื่องคอมเมื่อรันบนมือถือจริง
-
-ถ้าทดสอบบน Android Emulator ให้สั่งรันแบบนี้:
+## Build APK
 
 ```powershell
-flutter run -d emulator-5554 --dart-define=API_BASE_URL=http://10.0.2.2/it_asset_api/api
+cd it_asset_management_app
+flutter build apk --release
 ```
 
-## Postman Examples
+APK output:
 
-### Register
-
-POST `http://localhost/it_asset_api/api/register.php`
-
-```json
-{
-  "name": "New User",
-  "email": "newuser@example.com",
-  "password": "password123",
-  "role": "staff"
-}
+```text
+it_asset_management_app/build/app/outputs/flutter-apk/app-release.apk
 ```
 
-Response:
+## API Examples
 
-```json
-{
-  "success": true,
-  "message": "Register successful",
-  "data": {
-    "id": 3,
-    "name": "New User",
-    "email": "newuser@example.com",
-    "role": "staff"
-  }
-}
+Login:
+
+```http
+POST http://localhost/it_asset_api/api/login.php
+Content-Type: application/json
 ```
-
-### Login
-
-POST `http://localhost/it_asset_api/api/login.php`
 
 ```json
 {
@@ -143,120 +121,32 @@ POST `http://localhost/it_asset_api/api/login.php`
 }
 ```
 
-### List Assets
+List assets:
 
-GET `http://localhost/it_asset_api/api/assets/index.php`
-
-Search:
-
-GET `http://localhost/it_asset_api/api/assets/index.php?search=laptop`
-
-### Show Asset
-
-GET `http://localhost/it_asset_api/api/assets/show.php?id=1`
-
-### Create Asset
-
-POST `http://localhost/it_asset_api/api/assets/create.php`
-
-```json
-{
-  "asset_name": "MacBook Pro 14",
-  "asset_type": "Laptop",
-  "serial_number": "MBP-014-011",
-  "ip_address": "192.168.1.90",
-  "department": "Design",
-  "status": "in_use",
-  "assigned_user": "Arisa",
-  "position": "FE Line 4",
-  "purchase_date": "2026-05-21",
-  "note": "Design workstation"
-}
+```http
+GET http://localhost/it_asset_api/api/assets/index.php
 ```
 
-### Update Asset
+Search assets:
 
-POST `http://localhost/it_asset_api/api/assets/update.php`
-
-```json
-{
-  "id": 1,
-  "asset_name": "Dell Latitude 5440",
-  "asset_type": "Laptop",
-  "serial_number": "DL-5440-001",
-  "ip_address": "192.168.1.21",
-  "department": "IT",
-  "status": "repair",
-  "assigned_user": "Somchai",
-  "position": "IT Office",
-  "purchase_date": "2024-01-15",
-  "note": "Sent to repair"
-}
+```http
+GET http://localhost/it_asset_api/api/assets/index.php?search=IT250001
 ```
 
-### Delete Asset
+Show asset:
 
-POST `http://localhost/it_asset_api/api/assets/delete.php`
-
-```json
-{
-  "id": 1
-}
+```http
+GET http://localhost/it_asset_api/api/assets/show.php?id=1
 ```
 
-### List Maintenance Logs
+Maintenance logs:
 
-GET `http://localhost/it_asset_api/api/maintenance/index.php?asset_id=1`
-
-### Create Maintenance Log
-
-POST `http://localhost/it_asset_api/api/maintenance/create.php`
-
-```json
-{
-  "asset_id": 1,
-  "problem": "Cannot connect Wi-Fi",
-  "solution": "Reinstalled network driver",
-  "repair_by": "Niran",
-  "repair_date": "2026-05-21",
-  "status": "completed"
-}
+```http
+GET http://localhost/it_asset_api/api/maintenance/index.php?asset_id=1
 ```
 
-### Update Maintenance Log
+## Notes
 
-POST `http://localhost/it_asset_api/api/maintenance/update.php`
-
-```json
-{
-  "id": 1,
-  "asset_id": 1,
-  "problem": "Battery drains quickly",
-  "solution": "Replaced battery",
-  "repair_by": "Niran",
-  "repair_date": "2026-05-21",
-  "status": "completed"
-}
-```
-
-### Delete Maintenance Log
-
-POST `http://localhost/it_asset_api/api/maintenance/delete.php`
-
-```json
-{
-  "id": 1
-}
-```
-
-## API Response Format
-
-ทุก endpoint ส่ง JSON รูปแบบเดียวกัน:
-
-```json
-{
-  "success": true,
-  "message": "Assets loaded",
-  "data": []
-}
-```
+- Do not commit real Excel exports or production SQL dumps.
+- Keep MySQL access private. Mobile apps should call PHP API only.
+- For local XAMPP usage, keep both Apache and MySQL running.
