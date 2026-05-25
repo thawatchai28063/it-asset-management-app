@@ -2,6 +2,8 @@
 
 PHP web UI สำหรับใช้งานกับฐานข้อมูลเดียวกับ `it_asset_api`
 
+UI ใช้ Tailwind CSS CDN ดังนั้น deploy บน InfinityFree ได้โดยไม่ต้อง build frontend เพิ่ม
+
 ## Local XAMPP
 
 วางโฟลเดอร์นี้ไว้ที่:

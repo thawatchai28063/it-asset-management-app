@@ -69,4 +69,32 @@ function null_if_empty(?string $value): ?string
     $value = trim($value ?? '');
     return $value === '' ? null : $value;
 }
+
+function asset_status_class(?string $status): string
+{
+    switch ($status) {
+        case 'available':
+            return 'bg-emerald-50 text-emerald-700 ring-emerald-200';
+        case 'in_use':
+            return 'bg-blue-50 text-blue-700 ring-blue-200';
+        case 'repair':
+            return 'bg-amber-50 text-amber-700 ring-amber-200';
+        case 'retired':
+            return 'bg-slate-100 text-slate-600 ring-slate-200';
+        default:
+            return 'bg-indigo-50 text-indigo-700 ring-indigo-200';
+    }
+}
+
+function maintenance_status_class(?string $status): string
+{
+    switch ($status) {
+        case 'completed':
+            return 'bg-emerald-50 text-emerald-700 ring-emerald-200';
+        case 'in_progress':
+            return 'bg-amber-50 text-amber-700 ring-amber-200';
+        default:
+            return 'bg-slate-100 text-slate-700 ring-slate-200';
+    }
+}
 ?>

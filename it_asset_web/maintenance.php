@@ -48,70 +48,74 @@ $logs = $logStmt->fetchAll();
 
 $pageTitle = 'Maintenance - IT Asset Control';
 require __DIR__ . '/partials/header.php';
+$inputClass = 'w-full rounded-xl border border-slate-200 px-4 py-3 outline-none transition focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100';
 ?>
-<div class="page-head">
+<div class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
   <div>
-    <h1>Maintenance</h1>
-    <p><?= h($asset['asset_name']) ?> / <?= h($asset['it_tag'] ?: $asset['serial_number']) ?></p>
+    <p class="text-sm font-bold uppercase tracking-wide text-indigo-600">Maintenance</p>
+    <h1 class="mt-1 text-3xl font-black text-slate-950"><?= h($asset['asset_name']) ?></h1>
+    <p class="mt-2 text-slate-500"><?= h($asset['it_tag'] ?: $asset['serial_number']) ?></p>
   </div>
-  <a class="btn secondary" href="asset_detail.php?id=<?= (int) $assetId ?>">Back</a>
+  <a class="rounded-xl bg-slate-100 px-5 py-3 font-extrabold text-slate-700 transition hover:bg-slate-200" href="asset_detail.php?id=<?= (int) $assetId ?>">Back</a>
 </div>
 
-<form method="post" class="card form-grid two">
+<form method="post" class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
   <input type="hidden" name="asset_id" value="<?= (int) $assetId ?>">
-  <div class="field full">
-    <label>Problem</label>
-    <textarea name="problem" required></textarea>
+  <div class="grid gap-4 lg:grid-cols-2">
+    <div class="lg:col-span-2">
+      <label class="mb-1.5 block text-sm font-bold text-slate-600">Problem</label>
+      <textarea class="min-h-28 <?= $inputClass ?>" name="problem" required></textarea>
+    </div>
+    <div class="lg:col-span-2">
+      <label class="mb-1.5 block text-sm font-bold text-slate-600">Solution</label>
+      <textarea class="min-h-28 <?= $inputClass ?>" name="solution"></textarea>
+    </div>
+    <div>
+      <label class="mb-1.5 block text-sm font-bold text-slate-600">Repair By</label>
+      <input class="<?= $inputClass ?>" name="repair_by" required>
+    </div>
+    <div>
+      <label class="mb-1.5 block text-sm font-bold text-slate-600">Repair Date</label>
+      <input class="<?= $inputClass ?>" type="date" name="repair_date" value="<?= date('Y-m-d') ?>" required>
+    </div>
+    <div>
+      <label class="mb-1.5 block text-sm font-bold text-slate-600">Status</label>
+      <select class="<?= $inputClass ?>" name="status">
+        <?php foreach (['pending', 'in_progress', 'completed'] as $value): ?>
+          <option value="<?= $value ?>"><?= $value ?></option>
+        <?php endforeach; ?>
+      </select>
+    </div>
   </div>
-  <div class="field full">
-    <label>Solution</label>
-    <textarea name="solution"></textarea>
-  </div>
-  <div class="field">
-    <label>Repair By</label>
-    <input name="repair_by" required>
-  </div>
-  <div class="field">
-    <label>Repair Date</label>
-    <input type="date" name="repair_date" value="<?= date('Y-m-d') ?>" required>
-  </div>
-  <div class="field">
-    <label>Status</label>
-    <select name="status">
-      <?php foreach (['pending', 'in_progress', 'completed'] as $value): ?>
-        <option value="<?= $value ?>"><?= $value ?></option>
-      <?php endforeach; ?>
-    </select>
-  </div>
-  <div class="field actions">
-    <button type="submit">Add Log</button>
+  <div class="mt-5">
+    <button class="rounded-xl bg-indigo-600 px-5 py-3 font-extrabold text-white shadow-lg shadow-indigo-100 transition hover:bg-indigo-700" type="submit">Add Log</button>
   </div>
 </form>
 
-<div class="card" style="margin-top: 16px;">
-  <div class="table-wrap">
-    <table>
-      <thead><tr><th>Date</th><th>Problem</th><th>Solution</th><th>Repair By</th><th>Status</th><th>Actions</th></tr></thead>
-      <tbody>
+<div class="mt-5 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+  <div class="overflow-x-auto">
+    <table class="min-w-full divide-y divide-slate-200">
+      <thead class="bg-slate-50"><tr><th class="px-4 py-3 text-left text-xs font-black uppercase text-slate-500">Date</th><th class="px-4 py-3 text-left text-xs font-black uppercase text-slate-500">Problem</th><th class="px-4 py-3 text-left text-xs font-black uppercase text-slate-500">Solution</th><th class="px-4 py-3 text-left text-xs font-black uppercase text-slate-500">Repair By</th><th class="px-4 py-3 text-left text-xs font-black uppercase text-slate-500">Status</th><th class="px-4 py-3 text-left text-xs font-black uppercase text-slate-500">Actions</th></tr></thead>
+      <tbody class="divide-y divide-slate-100">
       <?php foreach ($logs as $log): ?>
-        <tr>
-          <td><?= h($log['repair_date']) ?></td>
-          <td><?= h($log['problem']) ?></td>
-          <td><?= h($log['solution']) ?></td>
-          <td><?= h($log['repair_by']) ?></td>
-          <td><span class="pill"><?= h($log['status']) ?></span></td>
-          <td>
+        <tr class="hover:bg-slate-50">
+          <td class="px-4 py-4"><?= h($log['repair_date']) ?></td>
+          <td class="px-4 py-4"><?= h($log['problem']) ?></td>
+          <td class="px-4 py-4"><?= h($log['solution']) ?></td>
+          <td class="px-4 py-4"><?= h($log['repair_by']) ?></td>
+          <td class="px-4 py-4"><span class="inline-flex rounded-full px-3 py-1 text-xs font-black ring-1 <?= maintenance_status_class($log['status']) ?>"><?= h($log['status']) ?></span></td>
+          <td class="px-4 py-4">
             <form method="post" onsubmit="return confirm('Delete this log?');">
               <input type="hidden" name="action" value="delete">
               <input type="hidden" name="asset_id" value="<?= (int) $assetId ?>">
               <input type="hidden" name="id" value="<?= (int) $log['id'] ?>">
-              <button class="danger" type="submit">Delete</button>
+              <button class="rounded-lg bg-red-50 px-3 py-2 text-sm font-bold text-red-700 hover:bg-red-100" type="submit">Delete</button>
             </form>
           </td>
         </tr>
       <?php endforeach; ?>
       <?php if (!$logs): ?>
-        <tr><td colspan="6">No maintenance logs.</td></tr>
+        <tr><td class="px-4 py-10 text-center text-slate-500" colspan="6">No maintenance logs.</td></tr>
       <?php endif; ?>
       </tbody>
     </table>
