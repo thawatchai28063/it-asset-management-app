@@ -103,48 +103,69 @@ require __DIR__ . '/partials/header.php';
   </div>
 </form>
 
-<div class="mt-5 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-  <div class="overflow-x-auto">
-    <table class="min-w-full divide-y divide-slate-200">
-      <thead class="bg-slate-50">
-        <tr>
-          <th class="px-4 py-3 text-left text-xs font-black uppercase text-slate-500">IT Tag</th>
-          <th class="px-4 py-3 text-left text-xs font-black uppercase text-slate-500">Asset</th>
-          <th class="px-4 py-3 text-left text-xs font-black uppercase text-slate-500">Department</th>
-          <th class="px-4 py-3 text-left text-xs font-black uppercase text-slate-500">User / Position</th>
-          <th class="px-4 py-3 text-left text-xs font-black uppercase text-slate-500">Status</th>
-          <th class="px-4 py-3 text-left text-xs font-black uppercase text-slate-500">Actions</th>
-        </tr>
-      </thead>
-      <tbody class="divide-y divide-slate-100">
-      <?php foreach ($assets as $asset): ?>
-        <tr class="hover:bg-slate-50">
-          <td class="px-4 py-4"><span class="font-black text-slate-950"><?= h($asset['it_tag'] ?: $asset['serial_number']) ?></span></td>
-          <td class="px-4 py-4">
-            <a class="font-bold text-indigo-600 hover:text-indigo-800" href="asset_detail.php?id=<?= (int) $asset['id'] ?>"><?= h($asset['asset_name']) ?></a><br>
-            <span class="text-sm text-slate-500"><?= h($asset['asset_type']) ?> / <?= h($asset['serial_number']) ?></span>
-          </td>
-          <td class="px-4 py-4 text-slate-700"><?= h($asset['department']) ?></td>
-          <td class="px-4 py-4 text-slate-700"><?= h($asset['assigned_user']) ?><br><span class="text-sm text-slate-500"><?= h($asset['position']) ?></span></td>
-          <td class="px-4 py-4"><span class="inline-flex rounded-full px-3 py-1 text-xs font-black ring-1 <?= asset_status_class($asset['status']) ?>"><?= h($asset['status']) ?></span></td>
-          <td class="px-4 py-4">
-            <div class="flex flex-wrap gap-2">
-              <a class="rounded-lg bg-slate-100 px-3 py-2 text-sm font-bold text-slate-700 hover:bg-slate-200" href="asset_detail.php?id=<?= (int) $asset['id'] ?>">View</a>
-              <a class="rounded-lg bg-indigo-50 px-3 py-2 text-sm font-bold text-indigo-700 hover:bg-indigo-100" href="asset_form.php?id=<?= (int) $asset['id'] ?>">Edit</a>
-              <form method="post" onsubmit="return confirm('Delete this asset?');">
-                <input type="hidden" name="action" value="delete">
-                <input type="hidden" name="id" value="<?= (int) $asset['id'] ?>">
-                <button class="rounded-lg bg-red-50 px-3 py-2 text-sm font-bold text-red-700 hover:bg-red-100" type="submit">Delete</button>
-              </form>
+<div class="mt-5">
+  <div class="mb-3 flex items-center justify-between gap-3">
+    <h2 class="text-lg font-black text-slate-950">Asset Cards</h2>
+    <span class="rounded-full bg-white px-3 py-1 text-sm font-bold text-slate-600 ring-1 ring-slate-200"><?= count($assets) ?> items</span>
+  </div>
+
+  <?php if (!$assets): ?>
+    <div class="rounded-2xl border border-dashed border-slate-300 bg-white p-10 text-center text-slate-500 shadow-sm">
+      No assets found.
+    </div>
+  <?php endif; ?>
+
+  <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+    <?php foreach ($assets as $asset): ?>
+      <article class="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:border-indigo-200 hover:shadow-xl">
+        <div class="h-1.5 bg-gradient-to-r from-indigo-600 via-blue-500 to-teal-500"></div>
+        <div class="p-5">
+          <div class="flex items-start justify-between gap-3">
+            <div class="min-w-0">
+              <div class="inline-flex rounded-full bg-indigo-50 px-3 py-1 text-xs font-black text-indigo-700 ring-1 ring-indigo-200">
+                <?= h($asset['it_tag'] ?: $asset['serial_number']) ?>
+              </div>
+              <h3 class="mt-3 line-clamp-2 text-lg font-black text-slate-950">
+                <a class="hover:text-indigo-700" href="asset_detail.php?id=<?= (int) $asset['id'] ?>"><?= h($asset['asset_name']) ?></a>
+              </h3>
+              <p class="mt-1 text-sm font-semibold text-slate-500"><?= h($asset['asset_type']) ?></p>
             </div>
-          </td>
-        </tr>
-      <?php endforeach; ?>
-      <?php if (!$assets): ?>
-        <tr><td class="px-4 py-10 text-center text-slate-500" colspan="6">No assets found.</td></tr>
-      <?php endif; ?>
-      </tbody>
-    </table>
+            <span class="shrink-0 rounded-full px-3 py-1 text-xs font-black ring-1 <?= asset_status_class($asset['status']) ?>"><?= h($asset['status']) ?></span>
+          </div>
+
+          <div class="mt-5 grid gap-3 text-sm">
+            <div class="rounded-xl bg-slate-50 p-3 ring-1 ring-slate-100">
+              <div class="text-xs font-black uppercase tracking-wide text-slate-400">Serial</div>
+              <div class="mt-1 break-all font-bold text-slate-800"><?= h($asset['serial_number']) ?></div>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+              <div class="rounded-xl bg-slate-50 p-3 ring-1 ring-slate-100">
+                <div class="text-xs font-black uppercase tracking-wide text-slate-400">Department</div>
+                <div class="mt-1 font-bold text-slate-800"><?= h($asset['department']) ?></div>
+              </div>
+              <div class="rounded-xl bg-slate-50 p-3 ring-1 ring-slate-100">
+                <div class="text-xs font-black uppercase tracking-wide text-slate-400">Position</div>
+                <div class="mt-1 font-bold text-slate-800"><?= h($asset['position'] ?: '-') ?></div>
+              </div>
+            </div>
+            <div class="rounded-xl bg-slate-50 p-3 ring-1 ring-slate-100">
+              <div class="text-xs font-black uppercase tracking-wide text-slate-400">Assigned User</div>
+              <div class="mt-1 font-bold text-slate-800"><?= h($asset['assigned_user'] ?: '-') ?></div>
+            </div>
+          </div>
+
+          <div class="mt-5 flex flex-wrap gap-2 border-t border-slate-100 pt-4">
+            <a class="rounded-lg bg-slate-100 px-3 py-2 text-sm font-bold text-slate-700 hover:bg-slate-200" href="asset_detail.php?id=<?= (int) $asset['id'] ?>">View</a>
+            <a class="rounded-lg bg-indigo-50 px-3 py-2 text-sm font-bold text-indigo-700 hover:bg-indigo-100" href="asset_form.php?id=<?= (int) $asset['id'] ?>">Edit</a>
+            <form method="post" onsubmit="return confirm('Delete this asset?');">
+              <input type="hidden" name="action" value="delete">
+              <input type="hidden" name="id" value="<?= (int) $asset['id'] ?>">
+              <button class="rounded-lg bg-red-50 px-3 py-2 text-sm font-bold text-red-700 hover:bg-red-100" type="submit">Delete</button>
+            </form>
+          </div>
+        </div>
+      </article>
+    <?php endforeach; ?>
   </div>
 </div>
 <?php require __DIR__ . '/partials/footer.php'; ?>
