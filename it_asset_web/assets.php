@@ -50,6 +50,12 @@ $assets = $stmt->fetchAll();
 
 $departments = db()->query('SELECT DISTINCT department FROM assets WHERE department <> "" ORDER BY department')->fetchAll();
 $assetTypes = db()->query('SELECT DISTINCT asset_type FROM assets WHERE asset_type <> "" ORDER BY asset_type')->fetchAll();
+$exportQuery = http_build_query([
+    'q' => $q,
+    'department' => $department,
+    'asset_type' => $assetType,
+    'status' => $status,
+]);
 
 $pageTitle = 'Assets - IT Asset Control';
 require __DIR__ . '/partials/header.php';
@@ -60,7 +66,10 @@ require __DIR__ . '/partials/header.php';
     <h1 class="mt-1 text-3xl font-black text-slate-950">Asset Inventory</h1>
     <p class="mt-2 text-slate-500">ค้นหา กรอง เพิ่ม แก้ไข และลบข้อมูลอุปกรณ์ IT</p>
   </div>
-  <a class="inline-flex items-center justify-center rounded-xl bg-indigo-600 px-5 py-3 font-extrabold text-white shadow-lg shadow-indigo-200 transition hover:bg-indigo-700" href="asset_form.php">Add Asset</a>
+  <div class="flex flex-wrap gap-2">
+    <a class="inline-flex items-center justify-center rounded-xl bg-emerald-600 px-5 py-3 font-extrabold text-white shadow-lg shadow-emerald-200 transition hover:bg-emerald-700" href="assets_export.php?<?= h($exportQuery) ?>">Export Excel</a>
+    <a class="inline-flex items-center justify-center rounded-xl bg-indigo-600 px-5 py-3 font-extrabold text-white shadow-lg shadow-indigo-200 transition hover:bg-indigo-700" href="asset_form.php">Add Asset</a>
+  </div>
 </div>
 
 <form class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm" method="get">
