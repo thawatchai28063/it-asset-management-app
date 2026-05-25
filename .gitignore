@@ -48,6 +48,7 @@ it_asset_management_import_phpmyadmin.sql
 it_asset_management_infinityfree_export.sql
 deploy/oracle/*.zip
 deploy/oracle/*import*.sql
+it_asset_web_infinityfree.zip
 
 # Generated reports/presentations/reference projects
 reports/

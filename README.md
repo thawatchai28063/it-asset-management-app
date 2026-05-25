@@ -25,6 +25,16 @@ it_asset_management_app/
       services/
       features/
       shared/
+
+it_asset_web/
+  config/
+  partials/
+  assets/
+  index.php
+  assets.php
+  asset_form.php
+  asset_detail.php
+  maintenance.php
 ```
 
 ## Features
@@ -37,6 +47,7 @@ it_asset_management_app/
 - Department and asset type filters
 - Maintenance history CRUD
 - Shared API config in one file
+- PHP web UI using the same MySQL database
 
 ## Backend Setup With XAMPP
 
@@ -150,3 +161,31 @@ GET http://localhost/it_asset_api/api/maintenance/index.php?asset_id=1
 - Do not commit real Excel exports or production SQL dumps.
 - Keep MySQL access private. Mobile apps should call PHP API only.
 - For local XAMPP usage, keep both Apache and MySQL running.
+
+## PHP Web UI
+
+Copy the web folder to XAMPP:
+
+```text
+C:\xampp\htdocs\it_asset_web
+```
+
+Open:
+
+```text
+http://localhost/it_asset_web
+```
+
+For InfinityFree, upload `it_asset_web` to:
+
+```text
+htdocs/it_asset_web
+```
+
+Then edit:
+
+```text
+it_asset_web/config/app.php
+```
+
+Use the MySQL host, database, username, and password from InfinityFree. The PHP web UI, PHP REST API, and Flutter app can all use the same `users`, `assets`, and `maintenance_logs` tables.
