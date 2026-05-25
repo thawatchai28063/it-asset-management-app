@@ -5,8 +5,10 @@ import 'package:it_asset_management_app/src/models/asset.dart';
 import 'package:it_asset_management_app/src/services/api_service.dart';
 import 'package:it_asset_management_app/src/shared/widgets/animated_app_icon.dart';
 import 'package:it_asset_management_app/src/shared/widgets/app_alerts.dart';
+import 'package:it_asset_management_app/src/features/assets/screens/asset_detail_screen.dart';
 import 'package:it_asset_management_app/src/features/assets/screens/asset_list_screen.dart';
 import 'package:it_asset_management_app/src/features/assets/screens/asset_summary_screen.dart';
+import 'package:it_asset_management_app/src/features/assets/screens/barcode_scanner_screen.dart';
 import 'package:it_asset_management_app/src/features/auth/screens/login_screen.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -89,6 +91,59 @@ class _DashboardScreenState extends State<DashboardScreen> {
       ),
     );
     _load();
+  }
+
+  Future<void> _openDetail(Asset asset) async {
+    if (asset.id == null) return;
+    await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => AssetDetailScreen(assetId: asset.id!)),
+    );
+    _load();
+  }
+
+  Future<void> _scanItTag() async {
+    final scannedValue = await Navigator.push<String>(
+      context,
+      MaterialPageRoute(builder: (_) => const BarcodeScannerScreen()),
+    );
+    if (!mounted || scannedValue == null || scannedValue.trim().isEmpty) {
+      return;
+    }
+
+    final itTag = scannedValue.trim();
+    setState(() => _loading = true);
+
+    final response = await _api.getAssets(search: itTag);
+    if (!mounted) return;
+
+    final assets = response.data ?? [];
+    final exactMatches = assets.where((asset) {
+      final tag = asset.itTag?.trim().toLowerCase();
+      return tag != null && tag == itTag.toLowerCase();
+    }).toList();
+
+    setState(() {
+      _loading = false;
+      if (response.success) {
+        _assets = assets;
+      }
+    });
+
+    final assetToOpen = exactMatches.isNotEmpty
+        ? exactMatches.first
+        : (assets.length == 1 ? assets.first : null);
+    if (assetToOpen != null) {
+      await _openDetail(assetToOpen);
+      return;
+    }
+
+    await showAppAlert(
+      context,
+      title: 'ไม่พบ IT Tag',
+      message: 'ไม่พบอุปกรณ์จากบาร์โค้ด: $itTag',
+      success: false,
+    );
   }
 
   Widget _summaryCard(
@@ -240,6 +295,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ),
                   ),
                   _dashboardSection('Explore'),
+                  _menuButton(
+                    label: 'Scan IT tag',
+                    icon: Icons.qr_code_scanner,
+                    color: Colors.teal,
+                    onPressed: _scanItTag,
+                  ),
+                  const SizedBox(height: 10),
                   _menuButton(
                     label: 'View by asset type',
                     icon: Icons.category,
