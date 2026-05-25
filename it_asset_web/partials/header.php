@@ -28,20 +28,41 @@ $flash = flash();
   </script>
 </head>
 <body class="min-h-screen bg-slate-100 text-slate-900 antialiased">
-  <header class="sticky top-0 z-30 border-b border-slate-200 bg-white/95 shadow-sm backdrop-blur">
-    <div class="mx-auto flex w-full max-w-7xl flex-col gap-3 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
-    <a class="inline-flex items-center gap-3 text-lg font-extrabold text-slate-950" href="index.php">
-      <span class="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br from-indigo-600 to-teal-500 text-sm font-black text-white shadow-lg shadow-indigo-200">IT</span>
-      <span>Asset Control</span>
+  <header class="sticky top-0 z-30 border-b border-slate-200 bg-white/90 shadow-sm backdrop-blur-xl">
+    <div class="mx-auto w-full max-w-7xl px-3 py-2 sm:px-4 sm:py-3">
+      <div class="flex flex-col gap-2 rounded-xl border border-slate-200 bg-slate-50/80 px-2.5 py-2.5 shadow-sm sm:flex-row sm:items-center sm:justify-between sm:gap-3 sm:rounded-2xl sm:px-3 sm:py-3">
+    <a class="group inline-flex items-center gap-2.5 text-base font-extrabold text-slate-950 sm:gap-3 sm:text-lg" href="index.php">
+      <span class="grid h-10 w-10 place-items-center rounded-xl bg-indigo-50 text-sm font-black text-indigo-700 ring-1 ring-indigo-100 transition group-hover:bg-indigo-100 sm:h-11 sm:w-11 sm:rounded-2xl">IT</span>
+      <span class="leading-tight">
+        <span class="block">Asset Control</span>
+        <span class="block text-[11px] font-bold uppercase tracking-wide text-slate-400 sm:text-xs">IT Inventory</span>
+      </span>
     </a>
     <?php if ($user): ?>
-      <nav class="flex flex-wrap items-center gap-2">
-        <a class="rounded-lg px-3 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100 hover:text-slate-950" href="index.php">Dashboard</a>
-        <a class="rounded-lg px-3 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100 hover:text-slate-950" href="assets.php">Assets</a>
-        <a class="rounded-lg px-3 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100 hover:text-slate-950" href="../it_asset_api/api/assets/index.php" target="_blank">API</a>
-        <a class="rounded-lg bg-red-50 px-3 py-2 text-sm font-bold text-red-600 hover:bg-red-100" href="logout.php">Logout</a>
+      <nav class="-mx-0.5 flex max-w-full flex-nowrap items-center gap-2 overflow-x-auto px-0.5 pb-1 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 sm:pb-0">
+        <a class="inline-flex shrink-0 items-center gap-1.5 rounded-xl bg-white px-2.5 py-2 text-xs font-bold text-slate-600 ring-1 ring-slate-200 transition hover:bg-indigo-50 hover:text-indigo-700 hover:ring-indigo-100 sm:gap-2 sm:px-3 sm:text-sm" href="index.php">
+          <span class="grid h-5 w-5 place-items-center rounded-lg bg-indigo-50 text-[10px] text-indigo-600 sm:h-6 sm:w-6 sm:text-xs">D</span>
+          Dashboard
+        </a>
+        <a class="inline-flex shrink-0 items-center gap-1.5 rounded-xl bg-white px-2.5 py-2 text-xs font-bold text-slate-600 ring-1 ring-slate-200 transition hover:bg-sky-50 hover:text-sky-700 hover:ring-sky-100 sm:gap-2 sm:px-3 sm:text-sm" href="assets.php">
+          <span class="grid h-5 w-5 place-items-center rounded-lg bg-sky-50 text-[10px] text-sky-600 sm:h-6 sm:w-6 sm:text-xs">A</span>
+          Assets
+        </a>
+        <a class="inline-flex shrink-0 items-center gap-1.5 rounded-xl bg-emerald-50 px-2.5 py-2 text-xs font-bold text-emerald-700 ring-1 ring-emerald-100 transition hover:bg-emerald-100 sm:gap-2 sm:px-3 sm:text-sm" href="assets_export.php">
+          <span class="grid h-5 w-5 place-items-center rounded-lg bg-white text-[10px] text-emerald-600 sm:h-6 sm:w-6 sm:text-xs">X</span>
+          Export Excel
+        </a>
+        <a class="inline-flex shrink-0 items-center gap-1.5 rounded-xl bg-white px-2.5 py-2 text-xs font-bold text-slate-600 ring-1 ring-slate-200 transition hover:bg-violet-50 hover:text-violet-700 hover:ring-violet-100 sm:gap-2 sm:px-3 sm:text-sm" href="../it_asset_api/api/assets/index.php" target="_blank">
+          <span class="grid h-5 w-5 place-items-center rounded-lg bg-violet-50 text-[10px] text-violet-600 sm:h-6 sm:w-6 sm:text-xs">API</span>
+          API
+        </a>
+        <a class="inline-flex shrink-0 items-center gap-1.5 rounded-xl bg-red-50 px-2.5 py-2 text-xs font-bold text-red-600 ring-1 ring-red-100 transition hover:bg-red-100 sm:gap-2 sm:px-3 sm:text-sm" href="logout.php">
+          <span class="grid h-5 w-5 place-items-center rounded-lg bg-white text-[10px] text-red-500 sm:h-6 sm:w-6 sm:text-xs">!</span>
+          Logout
+        </a>
       </nav>
     <?php endif; ?>
+      </div>
     </div>
   </header>
   <main class="mx-auto w-full max-w-7xl px-4 py-6 sm:py-8">
