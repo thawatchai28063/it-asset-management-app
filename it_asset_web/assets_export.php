@@ -38,7 +38,8 @@ $stmt = db()->prepare($sql);
 $stmt->execute($params);
 $assets = $stmt->fetchAll();
 
-$filename = 'it_asset_export_' . date('Ymd_His') . '.xls';
+$exportRowCount = count($assets);
+$filename = 'it_asset_export_' . $exportRowCount . '_rows_' . date('Ymd_His') . '.xls';
 
 header('Content-Type: application/vnd.ms-excel; charset=utf-8');
 header('Content-Disposition: attachment; filename="' . $filename . '"');
