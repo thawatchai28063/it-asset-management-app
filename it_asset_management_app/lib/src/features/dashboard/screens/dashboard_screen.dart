@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:it_asset_management_app/src/models/asset.dart';
 import 'package:it_asset_management_app/src/services/api_service.dart';
@@ -23,7 +24,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   void initState() {
     super.initState();
-    _load();
+    _checkLoginAndLoad();
+  }
+
+  Future<void> _checkLoginAndLoad() async {
+    final prefs = await SharedPreferences.getInstance();
+    final isLoggedIn = prefs.getBool('is_logged_in') ?? false;
+    if (!mounted) return;
+    if (!isLoggedIn) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const LoginScreen()),
+      );
+      return;
+    }
+    await _load();
   }
 
   Future<void> _load() async {
