@@ -19,7 +19,7 @@ require __DIR__ . '/partials/header.php';
   <div>
     <p class="text-sm font-bold uppercase tracking-wide text-indigo-600">Dashboard</p>
     <h1 class="mt-1 text-3xl font-black text-slate-950">IT Asset Overview</h1>
-    <p class="mt-2 text-slate-500">ข้อมูลชุดเดียวกับ PHP REST API และแอพมือถือ</p>
+    <p class="mt-2 text-slate-500">Same database as the PHP REST API and mobile app.</p>
   </div>
   <a class="inline-flex items-center justify-center rounded-xl bg-indigo-600 px-5 py-3 font-extrabold text-white shadow-lg shadow-indigo-200 transition hover:bg-indigo-700" href="assets.php">View all assets</a>
 </div>
@@ -53,17 +53,24 @@ require __DIR__ . '/partials/header.php';
   <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
     <div class="mb-4 flex items-center justify-between gap-4">
       <div>
-        <h2 class="text-xl font-black text-slate-950">Assets by Type</h2>
-        <p class="text-sm text-slate-500">เลือกประเภทเพื่อกรองรายการ</p>
+        <h2 class="text-xl font-black text-slate-950">Assets by Department</h2>
+        <p class="text-sm text-slate-500">Click a department to filter the asset list.</p>
       </div>
     </div>
     <div class="overflow-x-auto">
       <table class="min-w-full divide-y divide-slate-200">
-        <thead><tr><th class="px-3 py-3 text-left text-xs font-black uppercase text-slate-500">Type</th><th class="px-3 py-3 text-right text-xs font-black uppercase text-slate-500">Total</th></tr></thead>
+        <thead>
+          <tr>
+            <th class="px-3 py-3 text-left text-xs font-black uppercase text-slate-500">Department</th>
+            <th class="px-3 py-3 text-right text-xs font-black uppercase text-slate-500">Total</th>
+          </tr>
+        </thead>
         <tbody class="divide-y divide-slate-100">
-        <?php foreach ($typeRows as $row): ?>
+        <?php foreach ($departmentRows as $row): ?>
           <tr class="hover:bg-slate-50">
-            <td class="px-3 py-3"><a class="font-bold text-indigo-600 hover:text-indigo-800" href="assets.php?asset_type=<?= urlencode($row['asset_type']) ?>"><?= h($row['asset_type']) ?></a></td>
+            <td class="px-3 py-3">
+              <a class="font-bold text-indigo-600 hover:text-indigo-800" href="assets.php?department=<?= urlencode($row['department']) ?>"><?= h($row['department']) ?></a>
+            </td>
             <td class="px-3 py-3 text-right font-black text-slate-900"><?= (int) $row['total'] ?></td>
           </tr>
         <?php endforeach; ?>
@@ -75,17 +82,24 @@ require __DIR__ . '/partials/header.php';
   <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
     <div class="mb-4 flex items-center justify-between gap-4">
       <div>
-        <h2 class="text-xl font-black text-slate-950">Assets by Department</h2>
-        <p class="text-sm text-slate-500">เลือกแผนกเพื่อกรองรายการ</p>
+        <h2 class="text-xl font-black text-slate-950">Assets by Type</h2>
+        <p class="text-sm text-slate-500">Click a type to filter the asset list.</p>
       </div>
     </div>
     <div class="overflow-x-auto">
       <table class="min-w-full divide-y divide-slate-200">
-        <thead><tr><th class="px-3 py-3 text-left text-xs font-black uppercase text-slate-500">Department</th><th class="px-3 py-3 text-right text-xs font-black uppercase text-slate-500">Total</th></tr></thead>
+        <thead>
+          <tr>
+            <th class="px-3 py-3 text-left text-xs font-black uppercase text-slate-500">Type</th>
+            <th class="px-3 py-3 text-right text-xs font-black uppercase text-slate-500">Total</th>
+          </tr>
+        </thead>
         <tbody class="divide-y divide-slate-100">
-        <?php foreach ($departmentRows as $row): ?>
+        <?php foreach ($typeRows as $row): ?>
           <tr class="hover:bg-slate-50">
-            <td class="px-3 py-3"><a class="font-bold text-indigo-600 hover:text-indigo-800" href="assets.php?department=<?= urlencode($row['department']) ?>"><?= h($row['department']) ?></a></td>
+            <td class="px-3 py-3">
+              <a class="font-bold text-indigo-600 hover:text-indigo-800" href="assets.php?asset_type=<?= urlencode($row['asset_type']) ?>"><?= h($row['asset_type']) ?></a>
+            </td>
             <td class="px-3 py-3 text-right font-black text-slate-900"><?= (int) $row['total'] ?></td>
           </tr>
         <?php endforeach; ?>
