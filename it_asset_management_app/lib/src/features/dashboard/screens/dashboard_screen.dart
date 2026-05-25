@@ -222,6 +222,28 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
+  Widget _searchButton() {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: FilledButton.icon(
+        onPressed: _scanItTag,
+        style: FilledButton.styleFrom(
+          backgroundColor: Colors.teal,
+          foregroundColor: Colors.white,
+          minimumSize: const Size.fromHeight(54),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(14),
+          ),
+        ),
+        icon: const Icon(Icons.qr_code_scanner),
+        label: const Text(
+          'Search / Scan IT tag',
+          style: TextStyle(fontWeight: FontWeight.w800),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -246,6 +268,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             : ListView(
                 padding: const EdgeInsets.all(16),
                 children: [
+                  _searchButton(),
                   _dashboardSection('Overview'),
                   _summaryCard(
                     'Total assets',
@@ -295,13 +318,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     ),
                   ),
                   _dashboardSection('Explore'),
-                  _menuButton(
-                    label: 'Scan IT tag',
-                    icon: Icons.qr_code_scanner,
-                    color: Colors.teal,
-                    onPressed: _scanItTag,
-                  ),
-                  const SizedBox(height: 10),
                   _menuButton(
                     label: 'View by asset type',
                     icon: Icons.category,
